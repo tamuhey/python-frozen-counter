@@ -1,3 +1,4 @@
+import sys
 import pytest
 from frozencounter import FrozenCounter, FrozenInstanceError
 
@@ -47,3 +48,10 @@ def test_setitem():
         c[2] = 3
     with pytest.raises(FrozenInstanceError):
         c[1] = 3
+
+
+@pytest.mark.skipif(sys.version_info < (3, 6), reason="required >= python 3.6")
+def test_type_generics():
+    from frozencounter import TFrozenCounter
+
+    TFrozenCounter[str]

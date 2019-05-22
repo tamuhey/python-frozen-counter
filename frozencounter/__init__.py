@@ -1,9 +1,11 @@
 import _collections_abc
+import sys
 import heapq as _heapq
 from collections import Counter
 from collections.abc import Mapping
 from operator import eq as _eq
 from operator import itemgetter as _itemgetter
+import platform
 
 from decorator import decorator
 
@@ -281,3 +283,20 @@ class FrozenCounter(Mapping):
     @raise_frozen_error()
     def __setitem__(self, *args, **kwargs):
         pass
+
+
+if sys.version_info >= (3, 7):
+    from typing import _alias, T_co, FrozenSet
+
+    TFrozenCounter = _alias(FrozenCounter, T_co, inst=False)
+
+elif sys.version_info >= (3.6):
+    from typing import Dict, T, _generic_new
+
+    class TFrozenCounter(FrozenCounter, Dict[T, int], extra=FrozenCounter):
+        __slots__ = ()
+
+        def __new__(cls, *args, **kwds):
+            if cls._gorg is FrozenCounter:
+                return FrozenCounter(*args, **kwds)
+            return _generic_new(FrozenCounter, cls, *args, **kwds)
