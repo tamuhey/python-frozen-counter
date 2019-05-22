@@ -290,7 +290,7 @@ if sys.version_info >= (3, 7):
 
     TFrozenCounter = _alias(FrozenCounter, T_co, inst=False)
 
-elif sys.version_info >= (3.6):
+elif sys.version_info >= (3, 6):
     from typing import Dict, T, _generic_new
 
     class TFrozenCounter(FrozenCounter, Dict[T, int], extra=FrozenCounter):
